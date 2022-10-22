@@ -30,9 +30,8 @@ st_lottie(lottie_json, speed=1, height=150, key="initial")
 matplotlib.use("agg")
 _lock = RendererAgg.lock
 
-# Seaborn style setup
+# Grid Setup?
 
-sns.set_style("darkgrid")
 row0_spacer1, row0_1, row0_spacer2, row0_2, row0_spacer3 = st.columns(
     (0.1, 2, 0.2, 1, 0.1)
 )
