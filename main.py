@@ -10,6 +10,8 @@ from streamlit_lottie import st_lottie
 from streamlit_folium import st_folium
 import folium
 import koreanize_matplotlib
+from PIL import Image
+from glob import glob
 
 st.set_page_config(layout="wide")
 
@@ -38,7 +40,7 @@ row0_spacer1, row0_1, row0_spacer2, row0_2, row0_spacer3 = st.columns(
 
 # Title
 
-row0_1.title("Fine Dust Analysis by Chill Team")
+row0_1.title("South Korea Fine Dust Concentration Analysis")
 
 with row0_2:
     st.write("")
@@ -71,9 +73,9 @@ with row2_1:
         [
             "국내 미세먼지 농도",
             "미세먼지와 건강",
-            "국내 미세먼지의 국외 요인 (중국)",
-            "국내 미세먼지의 국내 요인",
-            "미세먼지와 기상 데이터의 연관성"
+            "국외 요인 (중국)",
+            "국내 요인",
+            "기상 데이터"
         ]
     )
 
@@ -82,9 +84,9 @@ with row2_1:
 file_dict = {
     "국내 미세먼지 농도" : "misemise",
     "미세먼지와 건강" : "mise_health",
-    "국내 미세먼지의 국외 요인 (중국)" : "misemise_china",
-    "국내 미세먼지의 국내 요인" : "misemise_korea",
-    "미세먼지와 기상 데이터의 연관성" : "misemise_weather"
+    "국외 요인 (중국)" : "misemise_china",
+    "국내 요인" : "misemise_korea",
+    "기상 데이터" : "misemise_weather"
 }
 
 def get_topic_data(topic_name):
@@ -165,9 +167,10 @@ with row4_1, _lock:
                 y_label = {"PM10":"Fine Dust PM10", "PM25":"Ultra Fine Dust PM2.5"}[selected_y]
             
             # Graph Visualization => Seaborn
+            st.markdown("미세먼지 농도")
             fig, ax = plt.subplots()
             sns.barplot(
-                    data=data, x=x_val, y=y_val, errorbar=None
+                    data=data, x=x_val, y=y_val, errorbar=None, palette="RdPu"
                 )
             ax.set_title("")
             ax.set_xlabel(x_label)
@@ -176,12 +179,16 @@ with row4_1, _lock:
 
             fig2, ax2 = plt.subplots()
             sns.lineplot(
-                    data=data, x=x_val, y=y_val
+                    data=data, x=x_val, y=y_val, color="red"
                 )
             ax2.set_title("")
             ax2.set_xlabel(x_label)
             ax2.set_ylabel(y_label)
             st.pyplot(fig2)
+
+            # Top 20 Locations
+            st.markdown("미세먼지 농도가 가장 높은 지역 20")
+            st.bar_chart(data.groupby(['지역'])['PM10','PM25'].mean().sort_values(['PM10','PM25'], ascending=False).head(20))
 
         # Folium Visualization
         with st.expander("Folium Visualization 보기 👉"), _lock:
@@ -252,6 +259,16 @@ with row4_1, _lock:
             fig3 = plt.figure(figsize=(10, 6))
             sns.heatmap(df_c, annot=True, fmt=".2f", cmap = "coolwarm", vmin=-1, vmax=1, mask=mask2);
             st.pyplot(fig3)
+
+    ####################################
+    # Topic No.5
+    elif topic == "기상 데이터":
+        with st.expander("Visualization 보기 👉"), _lock:
+            file_name = glob("image/weather/*.png")
+            for fn in file_name:
+                image = Image.open(fn)
+                st.image(image)
+
 
 # Footers
 
