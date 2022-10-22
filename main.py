@@ -112,7 +112,15 @@ row3_space1, row3_1, row3_space2 = st.columns(
 with row3_1, _lock:
     st.subheader("DataSet")
     with st.expander("DataSet 보기 👉"):
-        st.dataframe(data)
+        if topic == "미세먼지와 건강":
+            st.markdown("진료율")
+            st.dataframe(data)
+
+            data3 = pd.read_csv("data/mise_health_disease.csv", encoding='cp949')
+            st.markdown("사망 수")
+            st.dataframe(data3)
+        else:
+            st.dataframe(data)
 
 # Visualization (Different Based on Topics)
 row4_space1, row4_1, row4_space2 = st.columns(
@@ -213,6 +221,7 @@ with row4_1, _lock:
             sns.lineplot(
                     ax=ax2, data=data, x='연도', y='천식', color="red"
                 )
+            ax2.set_ylim(0, 12)
             st.pyplot(fig)
 
             # Correlation Visualization => Seaborn
@@ -222,10 +231,27 @@ with row4_1, _lock:
             sns.heatmap(corr, annot=True, fmt=".2f", cmap = "coolwarm", vmin=-1, vmax=1, mask=mask)
             st.pyplot(fig2)
 
-            #
-            
+            # Additional Visualization
+            data4 = data3.drop(columns=['각종 암','뇌혈관 질환','순환 질환','폐렴','폐암','피부 질환','협심증','호흡 질환'])
+            data4 = data4.melt(id_vars=['연도','만성 하기도 질환'],var_name='종류',value_name='농도')
+            data3["연도"] = data3["연도"].astype("str")
 
+            fig3, ax4 = plt.subplots(1,1, sharex=True)
+            sns.barplot(
+                    ax=ax4, data=data4, x='연도', y='농도', hue='종류', palette=['yellow','orange'], errorbar=None
+                )
+            ax5 = ax4.twinx()
+            sns.lineplot(
+                    ax=ax5, data=data3, x='연도', y='만성 하기도 질환', color="red"
+                )
+            ax5.set_ylim(0,700)
+            st.pyplot(fig3)
 
+            df_c = data3.corr()
+            mask2 = np.triu(np.ones_like(df_c))
+            fig3 = plt.figure(figsize=(10, 6))
+            sns.heatmap(df_c, annot=True, fmt=".2f", cmap = "coolwarm", vmin=-1, vmax=1, mask=mask2);
+            st.pyplot(fig3)
 
 # Footers
 
