@@ -4,8 +4,8 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import koreanize_matplotlib
-import matplotlib
-from matplotlib.backends.backend_agg import RendererAgg
+# import matplotlib
+# from matplotlib.backends.backend_agg import RendererAgg
 import requests
 from streamlit_lottie import st_lottie
 from streamlit_folium import st_folium
@@ -27,8 +27,8 @@ st_lottie(lottie_json, speed=1, height=150, key="initial")
 
 # Preparation to display plot
 
-matplotlib.use("agg")
-_lock = RendererAgg.lock
+# matplotlib.use("agg")
+# _lock = RendererAgg.lock
 
 # Seaborn style setup
 
@@ -110,7 +110,7 @@ row3_space1, row3_1, row3_space2 = st.columns(
     (0.1, 1, 0.1)
 )
 
-with row3_1, _lock:
+with row3_1:
     st.subheader("DataSet")
     with st.expander("DataSet 보기 👉"):
         st.dataframe(data)
@@ -120,7 +120,7 @@ row4_space1, row4_1, row4_space2 = st.columns(
     (0.1, 1, 0.1)
 )
 
-with row4_1, _lock:
+with row4_1:
     st.subheader("Data Visualization")
     ####################################
     # Topic No.1
@@ -234,7 +234,7 @@ row5_space1, row5_1, row5_space2 = st.columns(
     (0.1, 1, 0.1)
 )
 
-with row5_1, _lock:
+with row5_1:
     st.markdown("***")
     st.markdown(
         "멋쟁이사자처럼 AI 스쿨 7기 미드프로젝트"
