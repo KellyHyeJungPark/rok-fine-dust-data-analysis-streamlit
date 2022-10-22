@@ -3,13 +3,13 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-import koreanize_matplotlib
-# import matplotlib
-# from matplotlib.backends.backend_agg import RendererAgg
+import matplotlib
+from matplotlib.backends.backend_agg import RendererAgg
 import requests
 from streamlit_lottie import st_lottie
 from streamlit_folium import st_folium
 import folium
+import koreanize_matplotlib
 
 st.set_page_config(layout="wide")
 
@@ -27,8 +27,8 @@ st_lottie(lottie_json, speed=1, height=150, key="initial")
 
 # Preparation to display plot
 
-# matplotlib.use("agg")
-# _lock = RendererAgg.lock
+matplotlib.use("agg")
+_lock = RendererAgg.lock
 
 # Seaborn style setup
 
@@ -110,7 +110,7 @@ row3_space1, row3_1, row3_space2 = st.columns(
     (0.1, 1, 0.1)
 )
 
-with row3_1:
+with row3_1, _lock:
     st.subheader("DataSet")
     with st.expander("DataSet 보기 👉"):
         st.dataframe(data)
@@ -120,12 +120,12 @@ row4_space1, row4_1, row4_space2 = st.columns(
     (0.1, 1, 0.1)
 )
 
-with row4_1:
+with row4_1, _lock:
     st.subheader("Data Visualization")
     ####################################
     # Topic No.1
     if topic == "국내 미세먼지 농도":
-        with st.expander("Visualization 보기 👉"):
+        with st.expander("Visualization 보기 👉"), _lock:
             # Default Variables
             x_val = "연도"
             x_label = "Year"
@@ -177,7 +177,7 @@ with row4_1:
             st.pyplot(fig2)
 
         # Folium Visualization
-        with st.expander("Folium Visualization 보기 👉"):
+        with st.expander("Folium Visualization 보기 👉"), _lock:
             file_name = "data/misemise_folium.csv"
             data_fol = pd.read_csv(file_name, encoding='cp949')
 
@@ -199,7 +199,7 @@ with row4_1:
     ####################################
     # Topic No.2
     elif topic == "미세먼지와 건강":
-        with st.expander("Visualization 보기 👉"):
+        with st.expander("Visualization 보기 👉"), _lock:
 
             data2 = data.drop(columns=['아토피피부염','알레르기비염'])
             data2 = data2.melt(id_vars=['연도','천식'],var_name='종류',value_name='농도')
