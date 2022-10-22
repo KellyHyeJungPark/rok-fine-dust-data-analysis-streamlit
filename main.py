@@ -261,6 +261,15 @@ with row4_1, _lock:
             st.pyplot(fig3)
 
     ####################################
+    # Topic No.3
+    elif topic == "국외 요인 (중국)":
+        with st.expander("Visualization 보기 👉"), _lock:
+            file_name = glob("image/china/*.png")
+            for fn in file_name:
+                image = Image.open(fn)
+                st.image(image)
+
+    ####################################
     # Topic No.5
     elif topic == "기상 데이터":
         with st.expander("Visualization 보기 👉"), _lock:
