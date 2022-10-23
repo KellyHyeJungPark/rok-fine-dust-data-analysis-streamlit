@@ -101,6 +101,7 @@ def get_topic_data(topic_name):
 line1_spacer1, line1_1, line1_spacer2 = st.columns((0.1, 3.2, 0.1))
 
 with line1_1:
+    st.markdown("***")
     st.header("**{}**".format(topic))
 
 # Load Data
@@ -127,6 +128,11 @@ with row3_1, _lock:
         else:
             st.dataframe(data)
     data_load_state.text("")
+
+line2_spacer1, line2_1, line2_spacer2 = st.columns((0.1, 3.2, 0.1))
+
+with line2_1:
+    st.header("")
 
 # Visualization (Different Based on Topics)
 row4_space1, row4_1, row4_space2 = st.columns(
@@ -275,6 +281,12 @@ with row4_1, _lock:
                 st.image(image)
         viz_load_state.text("")
     ####################################
+    # Topic No.4
+    elif topic == "국내 요인":
+        with st.expander("Visualization 보기 👉"), _lock:
+            st.markdown("No Visualization Available")
+        viz_load_state.text("")    
+    ####################################
     # Topic No.5
     elif topic == "기상 데이터":
         with st.expander("Visualization 보기 👉"), _lock:
@@ -286,8 +298,13 @@ with row4_1, _lock:
 
 # Footers
 
+line3_spacer1, line3_1, line3_spacer2 = st.columns((0.1, 3.2, 0.1))
+
+with line3_1:
+    st.header("")
+
 row5_space1, row5_1, row5_space2 = st.columns(
-    (0.1, 1, 0.1)
+    (0.1, 3.2, 0.1)
 )
 
 with row5_1:
