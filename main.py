@@ -17,6 +17,7 @@ st.set_page_config(layout="wide")
 
 # Lottie Icon
 
+@st.cache
 def load_lottieurl(url: str):
     r = requests.get(url)
     if r.status_code != 200:
@@ -89,6 +90,7 @@ file_dict = {
     "기상 데이터" : "misemise_weather"
 }
 
+@st.cache
 def get_topic_data(topic_name):
     file_name = f"data/{file_dict[topic_name]}.csv"
     data = pd.read_csv(file_name, encoding='cp949')
@@ -113,6 +115,7 @@ row3_space1, row3_1, row3_space2 = st.columns(
 
 with row3_1, _lock:
     st.subheader("DataSet")
+    data_load_state = st.text('Loading data...⏳')
     with st.expander("DataSet 보기 👉"):
         if topic == "미세먼지와 건강":
             st.markdown("진료율")
@@ -123,6 +126,7 @@ with row3_1, _lock:
             st.dataframe(data3)
         else:
             st.dataframe(data)
+    data_load_state.text("")
 
 # Visualization (Different Based on Topics)
 row4_space1, row4_1, row4_space2 = st.columns(
@@ -131,6 +135,7 @@ row4_space1, row4_1, row4_space2 = st.columns(
 
 with row4_1, _lock:
     st.subheader("Data Visualization")
+    viz_load_state = st.text('Please Wait! Visualization Loading...⏳')
     ####################################
     # Topic No.1
     if topic == "국내 미세먼지 농도":
@@ -209,7 +214,7 @@ with row4_1, _lock:
             ).add_to(m)
             
             st.data = st_folium(m)
-
+        viz_load_state.text("")
     ####################################
     # Topic No.2
     elif topic == "미세먼지와 건강":
@@ -259,7 +264,7 @@ with row4_1, _lock:
             fig3 = plt.figure(figsize=(10, 6))
             sns.heatmap(df_c, annot=True, fmt=".2f", cmap = "coolwarm", vmin=-1, vmax=1, mask=mask2);
             st.pyplot(fig3)
-
+        viz_load_state.text("")
     ####################################
     # Topic No.3
     elif topic == "국외 요인 (중국)":
@@ -268,7 +273,7 @@ with row4_1, _lock:
             for fn in file_name:
                 image = Image.open(fn)
                 st.image(image)
-
+        viz_load_state.text("")
     ####################################
     # Topic No.5
     elif topic == "기상 데이터":
@@ -277,7 +282,7 @@ with row4_1, _lock:
             for fn in file_name:
                 image = Image.open(fn)
                 st.image(image)
-
+        viz_load_state.text("")
 
 # Footers
 
