@@ -284,7 +284,10 @@ with row4_1, _lock:
     # Topic No.4
     elif topic == "국내 요인":
         with st.expander("Visualization 보기 👉"), _lock:
-            st.markdown("No Visualization Available")
+            file_name = glob("image/korea/*.png")
+            for fn in file_name:
+                image = Image.open(fn)
+                st.image(image)
         viz_load_state.text("")    
     ####################################
     # Topic No.5
