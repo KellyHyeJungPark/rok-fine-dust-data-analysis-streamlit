@@ -17,7 +17,6 @@ st.set_page_config(layout="wide")
 
 # Lottie Icon
 
-@st.cache
 def load_lottieurl(url: str):
     r = requests.get(url)
     if r.status_code != 200:
@@ -90,7 +89,6 @@ file_dict = {
     "기상 데이터" : "misemise_weather"
 }
 
-@st.cache
 def get_topic_data(topic_name):
     file_name = f"data/{file_dict[topic_name]}.csv"
     data = pd.read_csv(file_name, encoding='cp949')
@@ -145,7 +143,7 @@ with row4_1, _lock:
     ####################################
     # Topic No.1
     if topic == "국내 미세먼지 농도":
-        with st.expander("Visualization 보기 👉"), _lock:
+        with st.expander("Visualization 보기 👉"):
             # Default Variables
             x_val = "연도"
             x_label = "Year"
@@ -202,7 +200,7 @@ with row4_1, _lock:
             st.bar_chart(data.groupby(['지역'])['PM10','PM25'].mean().sort_values(['PM10','PM25'], ascending=False).head(20))
 
         # Folium Visualization
-        with st.expander("Folium Visualization 보기 👉"), _lock:
+        with st.expander("Folium Visualization 보기 👉"):
             file_name = "data/misemise_folium.csv"
             data_fol = pd.read_csv(file_name, encoding='cp949')
 
@@ -224,7 +222,7 @@ with row4_1, _lock:
     ####################################
     # Topic No.2
     elif topic == "미세먼지와 건강":
-        with st.expander("Visualization 보기 👉"), _lock:
+        with st.expander("Visualization 보기 👉"):
 
             data2 = data.drop(columns=['아토피피부염','알레르기비염'])
             data2 = data2.melt(id_vars=['연도','천식'],var_name='종류',value_name='농도')
@@ -274,7 +272,7 @@ with row4_1, _lock:
     ####################################
     # Topic No.3
     elif topic == "국외 요인 (중국)":
-        with st.expander("Visualization 보기 👉"), _lock:
+        with st.expander("Visualization 보기 👉"):
             file_name = glob("image/china/*.png")
             for fn in file_name:
                 image = Image.open(fn)
@@ -283,7 +281,7 @@ with row4_1, _lock:
     ####################################
     # Topic No.4
     elif topic == "국내 요인":
-        with st.expander("Visualization 보기 👉"), _lock:
+        with st.expander("Visualization 보기 👉"):
             file_name = glob("image/korea/*.png")
             for fn in file_name:
                 image = Image.open(fn)
@@ -292,7 +290,7 @@ with row4_1, _lock:
     ####################################
     # Topic No.5
     elif topic == "기상 데이터":
-        with st.expander("Visualization 보기 👉"), _lock:
+        with st.expander("Visualization 보기 👉"):
             file_name = glob("image/weather/*.png")
             for fn in file_name:
                 image = Image.open(fn)
